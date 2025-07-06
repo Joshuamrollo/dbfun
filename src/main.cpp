@@ -33,7 +33,7 @@ void testCompression() {
     std::vector<uint8_t> decompressed = CompressionUtils::decompressWithLZ4(compressed);
     std::cout << "decompressed size: " << decompressed.size() << "\n";
 
-    assert(decompressed == input);
+    assert(decompressed == big_repeating);
     std::cout << "[PASS] Compression round-trip test\n";
 }
 
