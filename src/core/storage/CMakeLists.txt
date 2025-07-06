@@ -1,17 +1,13 @@
-# Add page subdirectory
-add_subdirectory(page)
+add_subdirectory(file_format)
 
 add_library(
     storage STATIC
-    BufferPool.cpp
-    DiskScheduler.cpp
-    IOManager.cpp
+    temp.cpp
 )
 
-# Link against page and common (assuming storage depends on them)
 target_link_libraries(
     storage PRIVATE
-    page
+    file_format
     common
 )
 
