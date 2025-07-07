@@ -35,16 +35,16 @@ std::uint64_t FileMetadata::getPageOffset(std::uint32_t page_id) {
 File::File(const std::string& file_path) 
     : _file_descriptor(-1), _next_page_id(0), _file_path(file_path), _page_written(false), 
     _file_metadata() {
-    std::filesystem::path dir_path(_file_path);
-    std::filesystem::create_directories(dir_path.parent_path());
-    
-    struct stat buffer;
-    if (stat(_file_path.c_str(), &buffer) != 0) {
+    if (!std::filesystem::exists(_file_path)) {
+        std::filesystem::path dir_path(_file_path);
+        std::filesystem::create_directories(dir_path.parent_path());
+        
         int temp_file_descriptor = open(_file_path.c_str(), O_CREAT, 0644);
         if (temp_file_descriptor < 0) {
             throw std::runtime_error("File::File error. failed to create file: " + 
                 _file_path);
         }
+
         close(temp_file_descriptor);
     }
 }
