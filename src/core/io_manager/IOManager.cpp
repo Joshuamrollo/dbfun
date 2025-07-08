@@ -1,5 +1,5 @@
-#include "klikedb/core/storage/io_manager/IOManager.h"
-#include "klikedb/core/storage/file_format/File.h"
+#include "klikedb/core/io_manager/IOManager.h"
+#include "klikedb/core/file_format/File.h"
 
 namespace klikedb {
 

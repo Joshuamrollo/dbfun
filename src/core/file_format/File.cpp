@@ -1,6 +1,6 @@
-#include "klikedb/core/storage/file_format/File.h"
-#include "klikedb/core/storage/file_format/SerializationUtils.h"
-#include "klikedb/core/storage/file_format/CompressionUtils.h"
+#include "klikedb/core/file_format/File.h"
+#include "klikedb/core/file_format/SerializationUtils.h"
+#include "klikedb/core/file_format/CompressionUtils.h"
 #include <cstdint>
 #include <filesystem>
 #include <fcntl.h>
@@ -11,21 +11,21 @@
 namespace klikedb {
 
 FileMetadata::FileMetadata() {
-    page_count = 0;
+    _page_count = 0;
 }
 
-void FileMetadata::addPage(std::uint32_t page_id, std::uint64_t page_offset) {
-    if(page_directory.find(page_id) != page_directory.end()) {
+void FileMetadata::addPage(PageId page_id, std::uint64_t page_offset) {
+    if(_page_directory.find(page_id) != _page_directory.end()) {
         throw std::runtime_error("FileMetadata::addPage error. page_id alr exists: " + 
             std::to_string(page_id));
     }
-    page_count++;
-    page_directory[page_id].first = page_offset;
+    _page_count++;
+    _page_directory[page_id].first = page_offset;
 }
 
-std::uint64_t FileMetadata::getPageOffset(std::uint32_t page_id) {
-    auto itr = page_directory.find(page_id);
-    if(itr == page_directory.end()) {
+std::uint64_t FileMetadata::getPageOffset(PageId page_id) {
+    auto itr = _page_directory.find(page_id);
+    if(itr == _page_directory.end()) {
         throw std::runtime_error("FileMetadata::getPageOffset error. page_id doesnt exist: " + 
             std::to_string(page_id));
     }
@@ -63,7 +63,7 @@ void File::openFileIfNeeded() {
     }
 }
 
-Page File::readPage(std::uint32_t page_id) {
+Page File::readPage(PageId page_id) {
     openFileIfNeeded();
     std::uint64_t offset = _file_metadata.getPageOffset(page_id);
 
@@ -72,7 +72,7 @@ Page File::readPage(std::uint32_t page_id) {
     }
 
     // creating buffer with size of compressed page
-    std::uint64_t compressed_size = _file_metadata.page_directory[page_id].second;
+    std::uint64_t compressed_size = _file_metadata._page_directory[page_id].second;
     std::vector<std::uint8_t> buffer(compressed_size);
 
     ssize_t bytes_read = read(_file_descriptor, buffer.data(), buffer.size());
@@ -84,7 +84,7 @@ Page File::readPage(std::uint32_t page_id) {
 }
 
 
-std::uint32_t File::writePage(Page& page) {
+PageId File::writePage(Page& page) {
     openFileIfNeeded();
     _page_written = true;
 
@@ -104,9 +104,9 @@ std::uint32_t File::writePage(Page& page) {
     }
 
     // update metadata
-    std::uint32_t page_id = _next_page_id++;
+    PageId page_id = _next_page_id++;
     _file_metadata.addPage(page_id, static_cast<std::uint64_t>(offset));
-    _file_metadata.page_directory[page_id] = std::make_pair(
+    _file_metadata._page_directory[page_id] = std::make_pair(
         static_cast<std::uint64_t>(offset), static_cast<std::uint64_t>(bytes_written));
 
     return page_id;

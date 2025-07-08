@@ -11,6 +11,9 @@ enum class DataType : std::uint8_t {
     // add more data types: timestamp, string, etc
 };
 
+// other types
+using PageId = std::uint32_t;
+
 }
 
 #endif

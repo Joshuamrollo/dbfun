@@ -1,8 +1,8 @@
-#include "klikedb/core/storage/file_format/Page.h"
+#include "klikedb/core/file_format/Page.h"
 
 namespace klikedb {
 
-Page::Page(std::uint32_t page_id, DataType data_type) 
+Page::Page(PageId page_id, DataType data_type) 
     : _page_id(page_id), _data_type(data_type), _data(PAGE_SIZE) {
     return;
 }
@@ -11,7 +11,7 @@ DataType Page::getDataType() const {
     return _data_type;
 }
 
-std::uint32_t Page::getPageId() const {
+PageId Page::getPageId() const {
     return _page_id;
 }
 

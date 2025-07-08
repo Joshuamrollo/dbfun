@@ -3,8 +3,8 @@
 
 #include <vector>
 #include <cstdint>
-#include "klikedb/core/storage/file_format/Page.h"
-#include "klikedb/core/storage/file_format/File.h"
+#include "klikedb/core/file_format/Page.h"
+#include "klikedb/core/file_format/File.h"
 
 namespace klikedb {
 

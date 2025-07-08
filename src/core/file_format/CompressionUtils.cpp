@@ -1,4 +1,4 @@
-#include "klikedb/core/storage/file_format/CompressionUtils.h"
+#include "klikedb/core/file_format/CompressionUtils.h"
 #include <cstring>
 #include <lz4.h>
 #include <vector>
