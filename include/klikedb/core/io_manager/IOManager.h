@@ -9,14 +9,14 @@ namespace klikedb {
 class IOManager {
 public:
     IOManager();
-    klikedb::File& getFile(const std::string& file_path, bool write_mode);
+    File& getFile(const std::string& file_path, bool write_mode);
     void closeFile(const std::string& file_path); 
     void createFile(const std::string& file_path);
     void doneWriting(const std::string& file_path);
 
 private:
     struct FileEntry {
-        std::unique_ptr<klikedb::File> _file_ptr;
+        std::unique_ptr<File> _file_ptr;
         bool _write_mode;
     };
 

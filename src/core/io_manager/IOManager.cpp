@@ -5,7 +5,7 @@ namespace klikedb {
 
 IOManager::IOManager() {}
 
-klikedb::File& IOManager::getFile(const std::string& file_path, bool write_mode) {
+File& IOManager::getFile(const std::string& file_path, bool write_mode) {
     //check if in open files
     auto itr = _open_files.find(file_path);
     if (itr != _open_files.end()) {

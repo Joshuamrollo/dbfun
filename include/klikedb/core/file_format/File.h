@@ -19,7 +19,6 @@ public:
     FileMetadata();
     void addPage(PageId page_id, std::uint64_t page_offset);
     std::uint64_t getPageOffset(PageId page_id);
-    bool doesPageIdExist(PageId page_id);
 };
 
 class File {

@@ -3,6 +3,7 @@
 
 #include "klikedb/common/DataType.h"
 #include "klikedb/core/file_format/Page.h"
+#include "klikedb/core/io_manager/IOManager.h"
 #include <memory>
 #include <unordered_map>
 #include <vector>
@@ -20,6 +21,7 @@ struct Frame {
 
 class BufferManager {
 public:
+    BufferManager(IOManager& io_manager);
     std::unique_ptr<Page> fetchPage(PageId page_id);
     void unpinPage(PageId page_id);
     void markDirty(PageId page_id);
@@ -32,6 +34,7 @@ private:
 
     std::unordered_map<PageId, std::unique_ptr<Frame>> _page_table;
     std::vector<Frame> _buffer_pool;
+    IOManager& _ioManager;
 };
 
 }

@@ -1,6 +1,6 @@
 add_library(
     common STATIC
-    BitOperations.cpp
+    QueryResult.cpp
 )
 
 target_include_directories(
