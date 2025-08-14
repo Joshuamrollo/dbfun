@@ -50,9 +50,9 @@ std::unique_ptr<LogicalOperator> QueryPlanner::createLogicalPlan(
             auto get = std::make_unique<LogicalGet>(table_name);
 
             auto proj = std::make_unique<LogicalProjection>(column_names);
-            proj->children.push_back(std::move(get));
+            proj->_children.push_back(std::move(get));
 
-            return proj;
+            return std::move(proj);
         }
 
         case hsql::StatementType::kStmtInsert: {
@@ -86,7 +86,8 @@ std::unique_ptr<LogicalOperator> QueryPlanner::createLogicalPlan(
                     } else if (expr->type == hsql::kExprLiteralFloat) {
                         row.emplace_back(std::to_string(expr->fval));
                     } else {
-                        row.emplace_back("UNSUPPORTED_EXPR");
+                        throw std::runtime_error(
+                            "only supporting simple column expressions for now");
                     }
                 }
                 values.emplace_back(std::move(row));
@@ -104,7 +105,7 @@ std::unique_ptr<LogicalOperator> QueryPlanner::createLogicalPlan(
 
             for (auto* col_def : *create_stmt->columns) {
                 columns.emplace_back(col_def->name, 
-                                   std::to_string(static_cast<int>(col_def->type.data_type)));
+                                std::to_string(static_cast<int>(col_def->type.data_type)));
             }
 
             return std::make_unique<LogicalCreate>(table_name, columns);

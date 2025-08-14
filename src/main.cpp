@@ -5,7 +5,7 @@
 int main() {
     klikedb::Catalog catalog; 
     klikedb::IOManager io_manager;
-    klikedb::BufferManager buffer_mgr(io_manager);  
+    klikedb::BufferManager buffer_mgr(io_manager, 64 * 1024);  
     klikedb::ExecutionEngine exec_engine(buffer_mgr); 
     klikedb::QueryScheduler scheduler(exec_engine); 
     klikedb::Binder binder(catalog);

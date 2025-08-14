@@ -5,6 +5,7 @@
 #include "klikedb/core/execution_engine/ExecutionEngine.h"
 #include "klikedb/common/LogicalOperator.h"
 #include "klikedb/common/PhysicalOperator.h"
+#include <memory>
 
 namespace klikedb {
 
@@ -15,10 +16,10 @@ public:
     void scheduleQuery(std::unique_ptr<LogicalOperator>& logical_plan_head, 
                        QueryResult& query_result);
 private:
-    PhysicalOperator generatePhysicalPlan();
+    std::unique_ptr<PhysicalOperator> generatePhysicalPlan(
+        std::unique_ptr<LogicalOperator>& logical_operator);
 
     ExecutionEngine _exec_engine;
-    LogicalOperator _logical_plan_head;
 
 };
 

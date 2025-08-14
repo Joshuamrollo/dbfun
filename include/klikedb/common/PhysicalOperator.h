@@ -3,13 +3,33 @@
 
 namespace klikedb {
 
-class PhysicalOperator {
-public:
-    PhysicalOperator();
-private:
+enum class PhysicalOperatorType {
+    PHYSICAL_TABLE_SCAN,
+    PHYSICAL_PROJECTION,
+    PHYSICAL_INSERT,
+    PHYSICAL_CREATE
+};
 
+class PhysicalOperator {
 
 };
+
+class PhysicalTableScan : public PhysicalOperator {
+
+};
+
+class PhysicalProjection : public PhysicalOperator {
+
+};
+
+class PhysicalInsert : public PhysicalOperator {
+
+};
+
+class PhysicalCreate : public PhysicalOperator {
+
+};
+
 
 }
 

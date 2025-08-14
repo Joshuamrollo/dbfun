@@ -16,7 +16,7 @@ enum class LogicalOperatorType {
 class LogicalOperator {
 public:
     LogicalOperatorType _type;
-    std::vector<std::unique_ptr<LogicalOperator>> children;
+    std::vector<std::unique_ptr<LogicalOperator>> _children;
 
     explicit LogicalOperator(LogicalOperatorType type)
         : _type(type) {}

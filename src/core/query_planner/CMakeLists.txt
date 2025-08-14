@@ -6,10 +6,6 @@ add_library(
     Binder.cpp
 )
 
-target_link_libraries(
-    query_planner PRIVATE 
-    common)
-
 target_include_directories(
     query_planner PUBLIC 
     ${CMAKE_SOURCE_DIR}/include
