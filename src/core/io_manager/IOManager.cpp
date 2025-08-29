@@ -1,5 +1,6 @@
 #include "klikedb/core/io_manager/IOManager.h"
 #include "klikedb/core/file_format/File.h"
+#include <memory>
 
 namespace klikedb {
 
@@ -9,12 +10,7 @@ File& IOManager::getFile(const std::string& file_path, bool write_mode) {
     //check if in open files
     auto itr = _open_files.find(file_path);
     if (itr != _open_files.end()) {
-        if(!itr->second._write_mode) {
-            itr->second._write_mode = write_mode;
-            return *(itr->second._file_ptr);
-        } else {
-            // handle conflicts. ill work on this l8r when not single threaded :p
-        }
+        return *(itr->second._file_ptr);
     }
 
     // create new entry
@@ -23,6 +19,12 @@ File& IOManager::getFile(const std::string& file_path, bool write_mode) {
     _open_files[file_path]._file_ptr = std::move(new_file);
     _open_files[file_path]._write_mode = write_mode;
     return file_ref;
+}
+
+std::unique_ptr<Page> IOManager::getPage(const std::string& file_path, PageId page_id, bool write_mode) {
+    File file = getFile(file_path, write_mode);
+    std::unique_ptr<Page> page = std::make_unique<Page>(file.readPage(page_id));
+    return page;
 }
 
 void IOManager::doneWriting(const std::string& file_path) {
@@ -42,6 +44,10 @@ void IOManager::closeFile(const std::string& file_path) {
         itr->second._file_ptr->closeFile();
         _open_files.erase(file_path);
     }
+}
+
+void IOManager::writePage(std::string& file_path, Page& page) {
+    _open_files[file_path]._file_ptr->writePage(page);
 }
 
 }
